@@ -22,4 +22,9 @@ public class ApplicationTest {
         }
     }
 
+    @Test
+    public void createAndCheckFiles_SmokeTest() {
+        Application.createAndCheckFiles(2);
+    }
+
 }
