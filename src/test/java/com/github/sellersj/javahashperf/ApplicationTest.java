@@ -23,6 +23,13 @@ public class ApplicationTest {
     }
 
     @Test
+    public void generateRandomAlphaNumericString() {
+        int size = 1024;
+        String randomString = Application.generateRandomAlphaNumericString(size);
+        assertEquals(size, randomString.length());
+    }
+
+    @Test
     public void createAndCheckFiles_SmokeTest() {
         Application.createAndCheckFiles(2);
     }

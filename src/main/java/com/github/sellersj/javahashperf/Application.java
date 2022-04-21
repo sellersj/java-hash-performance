@@ -53,9 +53,8 @@ public class Application {
 
                 // fill the file with junk here
                 PrintWriter writer = new PrintWriter(file, "UTF-8");
-                // TODO make this random data
-                writer.println("The first line");
-                writer.println("The second line");
+                // write some random data
+                writer.println(generateRandomAlphaNumericString(1024));
                 writer.close();
 
                 result.add(file);
@@ -86,6 +85,17 @@ public class Application {
 
         long t2 = System.currentTimeMillis();
         printTime("It took %s milliseconds to create a checksum which was " + hex, t1, t2);
+    }
+
+    // adapted from https://www.baeldung.com/java-random-string
+    public static String generateRandomAlphaNumericString(int targetStringLength) {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+
+        return RANDOM.ints(leftLimit, rightLimit + 1) //
+            .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)) //
+            .limit(targetStringLength) //
+            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
     }
 
     //////////////////////////////////////////////
