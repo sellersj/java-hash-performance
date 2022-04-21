@@ -39,11 +39,12 @@ public class Application {
         long t1 = System.currentTimeMillis();
         int count = 1;
         for (File file : files) {
-            System.out.println("Checking file " + count++);
+            System.out.println(String.format("Checking file %s of %s ", count++, numberOfFiles));
             checkFile(file);
         }
         long t2 = System.currentTimeMillis();
         printTime("It took %s milliseconds to check all of the files", t1, t2);
+        System.out.println(String.format("It took %s seconds to check all of the files", (t2 - t1) / 1000));
     }
 
     public static List<File> createRandomFiles(int size, int fileSize) {
