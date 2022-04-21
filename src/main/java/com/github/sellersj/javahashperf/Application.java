@@ -22,18 +22,19 @@ import java.util.Random;
  */
 public class Application {
 
-    private static final int NUMBER_OF_FILES = 2;
+    private static final int NUMBER_OF_FILES = 5;
 
-    private static final int NUMBER_OF_CHAR_IN_EACH_FILE = 1024;
+    /** This is for the file that are about 50 mb long. */
+    private static final int NUMBER_OF_CHAR_IN_EACH_FILE = 50000000;
 
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        createAndCheckFiles(NUMBER_OF_FILES);
+        createAndCheckFiles(NUMBER_OF_FILES, NUMBER_OF_CHAR_IN_EACH_FILE);
     }
 
-    public static void createAndCheckFiles(int numberOfFiles) {
-        List<File> files = createRandomFiles(numberOfFiles);
+    public static void createAndCheckFiles(int numberOfFiles, int randomFileSize) {
+        List<File> files = createRandomFiles(numberOfFiles, randomFileSize);
 
         long t1 = System.currentTimeMillis();
         int count = 1;
@@ -45,7 +46,7 @@ public class Application {
         printTime("It took %s milliseconds to check all of the files", t1, t2);
     }
 
-    public static List<File> createRandomFiles(int size) {
+    public static List<File> createRandomFiles(int size, int fileSize) {
         List<File> result = new ArrayList<>();
         System.out.println(String.format("About to create %s files", size));
         long t1 = System.currentTimeMillis();
@@ -58,7 +59,7 @@ public class Application {
                 // fill the file with junk here
                 PrintWriter writer = new PrintWriter(file, "UTF-8");
                 // write some random data
-                writer.println(generateRandomAlphaNumericString(NUMBER_OF_CHAR_IN_EACH_FILE));
+                writer.println(generateRandomAlphaNumericString(fileSize));
                 writer.close();
 
                 result.add(file);

@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test;
 
 public class ApplicationTest {
 
+    private static final int TEST_FILE_SIZE = 1024;
+
     @Test
     public void createRandomFiles() {
         int size = 2;
-        List<File> files = Application.createRandomFiles(size);
+        List<File> files = Application.createRandomFiles(size, TEST_FILE_SIZE);
         assertEquals(2, files.size());
 
         for (File file : files) {
@@ -31,7 +33,7 @@ public class ApplicationTest {
 
     @Test
     public void createAndCheckFiles_SmokeTest() {
-        Application.createAndCheckFiles(2);
+        Application.createAndCheckFiles(2, TEST_FILE_SIZE);
     }
 
 }
