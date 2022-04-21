@@ -22,10 +22,14 @@ import java.util.Random;
  */
 public class Application {
 
+    private static final int NUMBER_OF_FILES = 2;
+
+    private static final int NUMBER_OF_CHAR_IN_EACH_FILE = 1024;
+
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        createAndCheckFiles(2);
+        createAndCheckFiles(NUMBER_OF_FILES);
     }
 
     public static void createAndCheckFiles(int numberOfFiles) {
@@ -54,7 +58,7 @@ public class Application {
                 // fill the file with junk here
                 PrintWriter writer = new PrintWriter(file, "UTF-8");
                 // write some random data
-                writer.println(generateRandomAlphaNumericString(1024));
+                writer.println(generateRandomAlphaNumericString(NUMBER_OF_CHAR_IN_EACH_FILE));
                 writer.close();
 
                 result.add(file);

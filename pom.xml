@@ -20,6 +20,15 @@
       <version>5.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- just putting this here to make it easier to download the jar -->
+    <!--
+    <dependency>
+      <groupId>us.springett</groupId>
+      <artifactId>nist-data-mirror</artifactId>
+      <version>1.5.4</version>
+      <scope>test</scope>
+    </dependency>
+    -->
   </dependencies>
   <build>
     <pluginManagement>
