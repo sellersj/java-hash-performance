@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -45,18 +44,19 @@ public class Application {
     public static void printSystemInfo() {
         System.out.println("System info:");
 
+        // hostname
         try {
             System.out.println("Hostname: " + InetAddress.getLocalHost().getHostName());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-        // env vars
-        List<String> envVarsToCheck = Arrays.asList("NUMBER_OF_PROCESSORS");
-        Map<String, String> env = System.getenv();
-        for (String envVar : envVarsToCheck) {
-            System.out.println(envVar + " : " + env.get(envVar));
-        }
+        // runtime info
+        Runtime runtime = Runtime.getRuntime();
+        System.out.println("Number of available processors: " + runtime.availableProcessors());
+        System.out.println("Free memory: " + runtime.freeMemory());
+        System.out.println("Max memory: " + runtime.maxMemory());
+        System.out.println("Total memory: " + runtime.totalMemory());
 
         // system vars
         List<String> sysVars = Arrays.asList("java.vendor", "java.vm.name", "java.version");
