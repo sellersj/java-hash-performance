@@ -4,19 +4,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 /**
  * This is to debug an issue with performance of the NistDataMirror from
  * https://github.com/stevespringett/nist-data-mirror/
- * 
- * 
+ *
+ *
  * @author sellersj
  *
  */
@@ -30,9 +35,43 @@ public class Application {
     private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
+        printSystemInfo();
         createAndCheckFiles(NUMBER_OF_FILES, NUMBER_OF_CHAR_IN_EACH_FILE);
     }
 
+    /**
+     * Print some system info to be able to know what is being run.
+     */
+    public static void printSystemInfo() {
+        System.out.println("System info:");
+
+        try {
+            System.out.println("Hostname: " + InetAddress.getLocalHost().getHostName());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        // env vars
+        List<String> envVarsToCheck = Arrays.asList("NUMBER_OF_PROCESSORS");
+        Map<String, String> env = System.getenv();
+        for (String envVar : envVarsToCheck) {
+            System.out.println(envVar + " : " + env.get(envVar));
+        }
+
+        // system vars
+        List<String> sysVars = Arrays.asList("java.vendor", "java.vm.name", "java.version");
+        Properties properties = System.getProperties();
+        for (String sysVar : sysVars) {
+            System.out.println(sysVar + " : " + properties.get(sysVar));
+        }
+    }
+
+    /**
+     * Do the work with configurable input.
+     *
+     * @param numberOfFiles of files to generate
+     * @param randomFileSize the size of the files
+     */
     public static void createAndCheckFiles(int numberOfFiles, int randomFileSize) {
         List<File> files = createRandomFiles(numberOfFiles, randomFileSize);
 
@@ -47,13 +86,20 @@ public class Application {
         System.out.println(String.format("It took %s seconds to check all of the files", (t2 - t1) / 1000));
     }
 
-    public static List<File> createRandomFiles(int size, int fileSize) {
+    /**
+     * Create temp files that will be deleted on JVM exit.
+     *
+     * @param numberOfFiles to create
+     * @param fileSize the size of each files in characters
+     * @return
+     */
+    public static List<File> createRandomFiles(int numberOfFiles, int fileSize) {
         List<File> result = new ArrayList<>();
-        System.out.println(String.format("About to create %s files", size));
+        System.out.println(String.format("About to create %s files", numberOfFiles));
         long t1 = System.currentTimeMillis();
 
         try {
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < numberOfFiles; i++) {
                 File file = File.createTempFile("temp-file-", ".data");
                 file.deleteOnExit();
 
@@ -74,10 +120,20 @@ public class Application {
         return result;
     }
 
+    /**
+     * @param message to print with a single placeholder
+     * @param t1 time 1
+     * @param t2 time 2
+     */
     public static void printTime(String message, long t1, long t2) {
         System.out.println(String.format(message, (t2 - t1)));
     }
 
+    /**
+     * "Check" the file by creating a hash of it.
+     *
+     * @param file to generate a hash for
+     */
     public static void checkFile(File file) {
         long t1 = System.currentTimeMillis();
         String hex = null;
@@ -93,7 +149,12 @@ public class Application {
         printTime("It took %s milliseconds to create a checksum which was " + hex, t1, t2);
     }
 
-    // adapted from https://www.baeldung.com/java-random-string
+    /**
+     * adapted from https://www.baeldung.com/java-random-string
+     *
+     * @param targetStringLength string length
+     * @return the random string
+     */
     public static String generateRandomAlphaNumericString(int targetStringLength) {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
@@ -111,8 +172,9 @@ public class Application {
 
         // file hashing with DigestInputStream
         try (DigestInputStream dis = new DigestInputStream(new FileInputStream(filepath), md)) {
-            while (dis.read() != -1)
+            while (dis.read() != -1) {
                 ; // empty loop to clear the data
+            }
             md = dis.getMessageDigest();
         }
 

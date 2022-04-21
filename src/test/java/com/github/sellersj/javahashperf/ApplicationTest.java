@@ -13,6 +13,11 @@ public class ApplicationTest {
     private static final int TEST_FILE_SIZE = 1024;
 
     @Test
+    public void printSystemInfo_SmokeTest() {
+        Application.printSystemInfo();
+    }
+
+    @Test
     public void createRandomFiles() {
         int size = 2;
         List<File> files = Application.createRandomFiles(size, TEST_FILE_SIZE);
